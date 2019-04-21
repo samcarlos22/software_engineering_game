@@ -6,7 +6,7 @@ public class Factory {
         return new Object();
     }
 
-    public Object clone(String type, Object object){
+    public Object duplicate(String type, Object object){
         return new Object();
     }
 
