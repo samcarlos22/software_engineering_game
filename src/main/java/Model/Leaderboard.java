@@ -1,14 +1,18 @@
 package Model;
 
+import java.util.*;
+import java.util.stream.*;
+import org.javatuples.Pair;
+
 public class Leaderboard {
 
-    private int[] leaderboard;
+    private Object[] leaderboard;
 
-    public int[] getLeaderboard() {
+    public Object[] getLeaderboard() {
         return leaderboard;
     }
 
-    public boolean setLeaderboard(int[] leaderboard) {
+    public boolean setLeaderboard(Object[] leaderboard) {
         try {
             this.leaderboard = leaderboard;
             return true;
@@ -18,6 +22,10 @@ public class Leaderboard {
     }
 
     public Leaderboard(int leaderboardSize) {
-        this.leaderboard = new int[leaderboardSize];
+        this.leaderboard = new Object[leaderboardSize];
+    }
+
+    public Leaderboard() {
     }
 }
+

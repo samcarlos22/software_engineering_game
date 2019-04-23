@@ -2,7 +2,7 @@ package Model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.javatuples.Pair;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LeaderboardTest {
@@ -11,11 +11,11 @@ class LeaderboardTest {
 
     @Test
     void getLeaderboard() {
-        assertArrayEquals(new int[10], this.leaderboard.getLeaderboard());
+        assertArrayEquals(new Object[10], this.leaderboard.getLeaderboard());
     }
 
     @Test
     void setLeaderboard() {
-        assertTrue(this.leaderboard.setLeaderboard(new int[15]));
+        assertTrue(this.leaderboard.setLeaderboard(new Object[]{Pair.with("Player1", 1000)}));
     }
 }

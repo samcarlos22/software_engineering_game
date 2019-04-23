@@ -48,4 +48,19 @@ public class Player {
     public Player(String name) {
         this.name = name;
     }
+
+    public Player(String name, int actualScore) {
+        this.name = name;
+        this.actualScore = actualScore;
+    }
+
+    public Player(String name, int actualScore, int bestScore) {
+        this.name = name;
+        this.actualScore = actualScore;
+        this.bestScore = bestScore;
+    }
+
+    public Player() {
+    }
 }
+

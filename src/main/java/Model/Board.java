@@ -20,4 +20,7 @@ public class Board {
     public Board(int rowSize, int columnSize) {
         this.board = new int[rowSize][columnSize];
     }
+
+    public Board() {
+    }
 }

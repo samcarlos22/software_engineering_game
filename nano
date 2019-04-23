@@ -1,0 +1,40 @@
+package Util;
+
+import Model.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class APITest {
+
+    private APITest.API api = new APITest.API();
+
+    @Test
+    void createBoard() {
+        assertEquals(Model.API().createBoard().getClass(), this.api.createBoard(10,10).getClass());
+    }
+
+    @Test
+
+    @Test
+    void createLeaderboard() {
+        assertEquals(Model.API().createLeaderboard().getClass(), this.api.createLeaderboard().getClass());
+    }
+
+    @Test
+
+    @Test
+    void createPlayer() {
+        assertEquals(Model.API().createPlayer().getClass(), this.api.createPlayer().getClass());
+    }
+
+    @Test
+
+    @Test
+    void createStone() {
+        assertEquals(Model.API().createStone().getClass(), this.api.createStone().getClass());
+    }
+
+    @Test
+
+}
+
