@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StoneTest {
 
-    private Stone stone = new Stone();
+    private Stone stone = new Stone(new Pair<Integer, Integer>(5,5));
 
     @Test
     void setPosition() {
@@ -17,7 +17,6 @@ class StoneTest {
 
     @Test
     void getPosition() {
-        this.stone.setPosition(new Pair<>(5,5));
         assertEquals(new Pair<>(5,5), this.stone.getPosition());
     }
 

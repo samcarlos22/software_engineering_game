@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
 
-    private Player player = new Player("Player1");
+    private Player player = new Player("Player1", 1000, 1000);
 
     @Test
     void getName() {
@@ -26,7 +26,6 @@ class PlayerTest {
 
     @Test
     void getActualScore() {
-        this.player.setActualScore(1000);
         assertEquals(1000, this.player.getActualScore());
     }
 
@@ -37,7 +36,6 @@ class PlayerTest {
 
     @Test
     void getBestScore() {
-        this.player.setBestScore(1000);
         assertEquals(1000, this.player.getBestScore());
     }
 

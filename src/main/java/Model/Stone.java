@@ -19,7 +19,11 @@ public class Stone {
         }
     }
 
+    public Stone(Pair<Integer,Integer> position) {
+        this.position = position;
+    }
+
     public Stone() {
-        this.position = new Pair<Integer,Integer>(0,0);
     }
 }
+
