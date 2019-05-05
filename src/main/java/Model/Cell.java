@@ -7,17 +7,14 @@ import javafx.scene.control.Button;
 
 public class Cell extends Button {
     private Integer x, y;
-
-    public Boolean isBlocked;
-
+    private Boolean isBlocked;
 
     public Cell(Integer x, int y, Boolean isBlocked, Integer id) {
         super();
         setMinSize(30, 30);
         setMaxSize(30, 30);
         setPrefSize(30,30);
-        if(x == 9 && y == 9) setText("*");
-        else if(isBlocked) setText("[" + id + "]");
+        if(isBlocked) setText("[" + id + "]");
         else setText(Integer.toString(id));
         this.x = x;
         this.y = y;

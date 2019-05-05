@@ -8,6 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.util.Random;
@@ -19,6 +21,7 @@ public class Controller {
     private Cell lastCell;
     private Cell currentCell;
     private Scene scene;
+    private Label output;
 
     public void createScene(Parent sceneRoot){
         scene = new Scene(sceneRoot);
@@ -36,8 +39,8 @@ public class Controller {
         view = new View();
     }
 
-    public void showView(Stage stage) {
-        view.launchView(stage);
+    public BorderPane getView() {
+        return view;
     }
 
     public void createBoard(){
@@ -46,6 +49,14 @@ public class Controller {
 
     public Board getBoard(){
         return board;
+    }
+
+    public void createOutput(){
+        output = new Label();
+    }
+
+    public Label getOutput(){
+        return output;
     }
 
     public void fillBoard(Integer rowsNumber, Integer columnsNumber) {
@@ -66,8 +77,11 @@ public class Controller {
                     lastCell.mark();
                 }
 
-                if(x == rowsNumber && y == columnsNumber)
+                if(x == rowsNumber - 1 && y == columnsNumber - 1){
+                    c.setId("100");
+                    c.setText("*");
                     c.setEvent(addWinEvent());
+                }
                 else
                     c.setEvent(addMoveEvent());
 
@@ -76,25 +90,30 @@ public class Controller {
         }
     }
 
-    public EventHandler<ActionEvent> addMoveEvent() {
+    private EventHandler<ActionEvent> addMoveEvent() {
         return event -> {
             currentCell = (Cell) event.getSource();
             if (canMoveToCell()) {
                 lastCell.unmark();
-                currentCell.mark();
                 lastCell = currentCell;
                 lastCell.mark();
             }
         };
     }
 
-    public EventHandler<ActionEvent> addWinEvent() {
+    private EventHandler<ActionEvent> addWinEvent(){
         return event -> {
-            System.out.println("Congratulations!!! You Won.");
+            currentCell = (Cell) event.getSource();
+            if (canMoveToCell()) {
+                lastCell.unmark();
+                lastCell = currentCell;
+                lastCell.mark();
+                output.setText("Congratulations!! You won.");
+            }
         };
     }
 
-    public Boolean canMoveToCell() {
+    private Boolean canMoveToCell() {
         if (!lastCell.isBlocked()) {
             if (currentCell.getCoordX() == lastCell.getCoordX() + Integer.parseInt(lastCell.getId())
                     && currentCell.getCoordY() == lastCell.getCoordY()
@@ -104,6 +123,7 @@ public class Controller {
                     && currentCell.getCoordX() == lastCell.getCoordX()
                     || currentCell.getCoordY() == lastCell.getCoordY() - Integer.parseInt(lastCell.getId())
                     && currentCell.getCoordX() == lastCell.getCoordX()) {
+                output.setText("");
                 return true;
             }
         } else {
@@ -115,9 +135,11 @@ public class Controller {
                     && currentCell.getCoordX() == lastCell.getCoordX() - Integer.parseInt(lastCell.getId())
                     || currentCell.getCoordY() == lastCell.getCoordY() - Integer.parseInt(lastCell.getId())
                     && currentCell.getCoordX() == lastCell.getCoordX() + Integer.parseInt(lastCell.getId())) {
+                output.setText("");
                 return true;
             }
         }
+        output.setText("Invalid move.");
         return false;
     }
 

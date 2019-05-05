@@ -1,21 +1,22 @@
 package View;
 
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.layout.BorderPane;
 
 
-public class View {
+public class View extends BorderPane {
 
+    private BorderPane view;
 
-    public void launchView(Stage stage) {
-        stage.show();
+    public View(){
+        view = new BorderPane();
     }
 
-    public void closeView(Stage stage){
-        stage.close();
+    public BorderPane getView() {
+        return view;
     }
 
-    public void changeScene(Stage stage, Scene scene){
-        stage.setScene(scene);
+    public void setView(BorderPane view) {
+        this.view = view;
     }
+
 }
