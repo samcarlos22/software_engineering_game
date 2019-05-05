@@ -13,7 +13,7 @@
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <mainClass>Main</mainClass>
+        <mainClass>Game.Main</mainClass>
     </properties>
 
     <dependencies>
@@ -30,7 +30,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.1</version>
                 <configuration>
-                    <mainClass>Main</mainClass>
+                    <mainClass>Game.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>

@@ -1,49 +1,100 @@
-import java.util.Random;
-import javafx.application.Application;
+package Controller;
+
+import Model.Board;
+import Model.Cell;
+import View.View;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.util.Random;
 
-public class Main extends Application {
 
-    private Board playerBoard;
+public class Controller {
+    private View view;
+    private Board board;
     private Cell lastCell;
     private Cell currentCell;
-    private Integer boardRowsSize = 10;
-    private Integer boardColumnsSize = 10;
+    private Scene scene;
 
-    private Random random = new Random();
+    public void createScene(Parent sceneRoot){
+        scene = new Scene(sceneRoot);
+    }
 
-    private Parent createContent() {
-        BorderPane root = new BorderPane();
-        root.setPrefSize(400, 400);
+    public Scene getScene(){
+        return scene;
+    }
 
-        //root.setRight(new Text("Leaderboard"));
-        //root.setTop(new Text("Welcome to the Game"));
-        playerBoard = new Board(boardRowsSize, boardColumnsSize, event -> {
+    public void addToScene(Parent sceneRoot){
+        scene.setRoot(sceneRoot);
+    }
+
+    public void createView() {
+        view = new View();
+    }
+
+    public void showView(Stage stage) {
+        view.launchView(stage);
+    }
+
+    public void createBoard(){
+        board = new Board();
+    }
+
+    public Board getBoard(){
+        return board;
+    }
+
+    public void fillBoard(Integer rowsNumber, Integer columnsNumber) {
+        Random random = new Random();
+        for (int x = 0; x < rowsNumber; x++) {
+            for (int y = 0; y < columnsNumber; y++) {
+                float blockChance = random.nextFloat();
+                Boolean isBlocked = false;
+                if (blockChance <= 0.20) {
+                    isBlocked = true;
+                }
+
+                Cell c = new Cell(x, y, isBlocked, random.nextInt(4) + 1);
+
+                //Starting point of the board
+                if (x == 0 && y == 0) {
+                    lastCell = c;
+                    lastCell.mark();
+                }
+
+                if(x == rowsNumber && y == columnsNumber)
+                    c.setEvent(addWinEvent());
+                else
+                    c.setEvent(addMoveEvent());
+
+                board.add(c, x, y);
+            }
+        }
+    }
+
+    public EventHandler<ActionEvent> addMoveEvent() {
+        return event -> {
             currentCell = (Cell) event.getSource();
-            //System.out.println(currentCell.getText());
-            if (canMove()) {
+            if (canMoveToCell()) {
                 lastCell.unmark();
                 currentCell.mark();
                 lastCell = currentCell;
-                if (lastCell.getText().equals("*"))
-                    System.out.println("You Won!!");
                 lastCell.mark();
             }
-        });
-
-        lastCell = playerBoard.getStartCell();
-        lastCell.mark();
-
-        root.setCenter(playerBoard);
-
-        return root;
+        };
     }
 
-    public Boolean canMove() {
+    public EventHandler<ActionEvent> addWinEvent() {
+        return event -> {
+            System.out.println("Congratulations!!! You Won.");
+        };
+    }
+
+    public Boolean canMoveToCell() {
         if (!lastCell.isBlocked()) {
             if (currentCell.getCoordX() == lastCell.getCoordX() + Integer.parseInt(lastCell.getId())
                     && currentCell.getCoordY() == lastCell.getCoordY()
@@ -70,16 +121,4 @@ public class Main extends Application {
         return false;
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Scene scene = new Scene(createContent());
-        primaryStage.setTitle("Game");
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
-        primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
