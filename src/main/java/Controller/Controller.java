@@ -2,6 +2,8 @@ package Controller;
 
 import Model.Board;
 import Model.Cell;
+import Model.Leaderboard;
+import Model.Player;
 import View.View;
 
 import javafx.event.ActionEvent;
@@ -10,8 +12,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.time.Instant;
 import java.util.Random;
 
 
@@ -20,6 +24,8 @@ public class Controller {
     private Board board;
     private Cell lastCell;
     private Cell currentCell;
+    private Player player;
+    private Leaderboard leaderboard;
     private Scene scene;
     private Label output;
 
@@ -29,10 +35,6 @@ public class Controller {
 
     public Scene getScene(){
         return scene;
-    }
-
-    public void addToScene(Parent sceneRoot){
-        scene.setRoot(sceneRoot);
     }
 
     public void createView() {
@@ -50,6 +52,14 @@ public class Controller {
     public Board getBoard(){
         return board;
     }
+
+    public void createPlayer(){ player = new Player(); }
+
+    public Player getPlayer() { return player; }
+
+    public void createLeaderboard(){ leaderboard = new Leaderboard(); }
+
+    public Leaderboard getLeaderboard(){ return leaderboard; }
 
     public void createOutput(){
         output = new Label();

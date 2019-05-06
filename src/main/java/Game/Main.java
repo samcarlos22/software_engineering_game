@@ -4,24 +4,39 @@ import Controller.Controller;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 
+
 public class Main extends Application {
+
+    static Controller controller;
+    static Button startButton;
+    static Button restartButton;
+    static Button exitButton;
+    static TextField nameField;
+    static VBox startMenu;
 
     @Override
     public void start(Stage stage) throws Exception {
+        startButton = new Button("Start");
+        restartButton = new Button("Reset");
+        exitButton = new Button("Exit");
+        nameField = new TextField("Player Name");
+        startMenu = new VBox();
+
         //Set up controller
-        Controller controller = new Controller();
+        controller = new Controller();
 
         //Set up board
         controller.createBoard();
@@ -35,49 +50,21 @@ public class Main extends Application {
         //Set up view
         controller.createView();
         controller.getView().setPrefSize(600, 480);
-        //controller.getView().setCenter(controller.getBoard());
-        controller.getView().setAlignment(controller.getOutput(), Pos.CENTER);
-        controller.getView().setMargin(controller.getOutput(), new Insets(12,12,30,12));
-        //controller.getView().setBottom(controller.getOutput());
 
+        //Set up new player
+        controller.createPlayer();
+        controller.getPlayer().setAlignment(Pos.CENTER);
 
         //Set up leaderboard
-        Label p1 = new Label("Player 1");
-        Label p2 = new Label("Player 2");
-        Label p3 = new Label("Player 3");
-        Label p4 = new Label("Player 4");
-        Label p5 = new Label("Player 5");
-        VBox leaderboard = new VBox();
-        leaderboard.getChildren().addAll(p1, p2, p3, p4, p5);
-        leaderboard.setAlignment(Pos.CENTER);
-        controller.getView().setAlignment(leaderboard, Pos.CENTER);
-        controller.getView().setMargin(leaderboard, new Insets(12,12,12,12));
-        //controller.getView().setRight(leaderboard);
+        controller.createLeaderboard();
+        controller.getLeaderboard().setAlignment(Pos.CENTER);
 
-        //Set up start screen
-        VBox startScreen = new VBox();
-        TextField name = new TextField("Player Name");
-        name.setAlignment(Pos.CENTER);
-        name.setMaxSize(200, 200);
-        controller.getView().setAlignment(name, Pos.CENTER);
-        Button start = new Button("Start");
-        Button exit = new Button("Exit");
-        start.setOnAction(actionEvent -> {
-            start.setText("Reset");
-            startScreen.getChildren().remove(name);
-            controller.getView().setAlignment(start, Pos.CENTER);
-            controller.getView().setCenter(controller.getBoard());
-            controller.getView().setRight(leaderboard);
-            controller.getView().setLeft(startScreen);
-            controller.getView().setTop(new Label("Welcome to the game " + name.getText()));
-            controller.getView().setBottom(controller.getOutput());
-            leaderboard.getChildren().add(new Label(name.getText()));
-        });
-        exit.setOnAction(actionEvent -> Platform.exit());
-        startScreen.getChildren().addAll(name, start, exit);
-        startScreen.setAlignment(Pos.CENTER);
-        controller.getView().setAlignment(startScreen, Pos.CENTER);
-        controller.getView().setCenter(startScreen);
+        setUpStartMenu();
+
+        //Set up view alignment and margin
+        controller.getView().setAlignment(controller.getLeaderboard(), Pos.CENTER);
+        controller.getView().setAlignment(controller.getOutput(), Pos.CENTER);
+        controller.getView().setMargin(controller.getOutput(), new Insets(12,12,30,12));
 
         //Set up scene
         controller.createScene(controller.getView());
@@ -88,6 +75,54 @@ public class Main extends Application {
         stage.setResizable(false);
 
         stage.show();
+    }
+
+    public void setUpStartMenu(){
+        nameField.setAlignment(Pos.CENTER);
+        nameField.setMaxSize(200, 200);
+
+        startButton.setOnAction(startGameEvent());
+        exitButton.setOnAction(exitGameEvent());
+
+        startMenu.getChildren().addAll(nameField, startButton, exitButton);
+        startMenu.setAlignment(Pos.CENTER);
+
+        controller.getView().setAlignment(nameField, Pos.CENTER);
+        controller.getView().setAlignment(startMenu, Pos.CENTER);
+
+        controller.getView().setCenter(startMenu);
+    }
+
+    public EventHandler<ActionEvent> startGameEvent(){
+        return startGame -> {
+            restartButton.setOnAction(restartGameEvent());
+            startMenu.getChildren().removeAll(nameField, startButton, exitButton);
+            startMenu.getChildren().addAll(restartButton, exitButton);
+
+            controller.getView().setAlignment(startMenu, Pos.CENTER);
+
+            controller.getPlayer().setName(nameField.getText());
+
+            controller.getView().setCenter(controller.getBoard());
+            controller.getView().setRight(controller.getLeaderboard());
+            controller.getView().setLeft(startMenu);
+            controller.getView().setTop(new Label("Welcome to the game " + controller.getPlayer().getName()));
+            controller.getView().setBottom(controller.getOutput());
+
+            //controller.getLeaderboard().getChildren().add(new Label(controller.getPlayer().getName()));
+        };
+    }
+
+    public EventHandler<ActionEvent> restartGameEvent(){
+        return restartGame -> {
+            controller.createBoard();
+            controller.fillBoard(10,10);
+            controller.getView().setCenter(controller.getBoard());
+        };
+    }
+
+    public EventHandler<ActionEvent> exitGameEvent(){
+        return exitGame -> Platform.exit();
     }
 
     public static void main(String[] args) {
