@@ -1,16 +1,14 @@
 package Model;
 
-import javafx.scene.Node;
-import javafx.scene.Parent;
+import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 
 
-public class Board extends Parent {
+public class Board extends GridPane{
     private GridPane board;
 
     public Board(){
         board = new GridPane();
-        getChildren().add(board);
     }
 
     public GridPane getBoard(){
@@ -19,10 +17,6 @@ public class Board extends Parent {
 
     public void setBoard(GridPane board){
         this.board = board;
-    }
-
-    public void add(Object object, Integer coordX, Integer coordY){
-        board.add((Node)object, coordX, coordY, 1, 1);
     }
 
 }

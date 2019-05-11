@@ -1,51 +1,87 @@
 package Model;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
 
 public class Cell extends Button {
-    private Integer x, y;
-    private Boolean isBlocked;
+    private Button cell;
+    private Integer coordX, coordY;
+    private String markStyle, unmarkStyle;
+    private Boolean block;
+    private Integer size;
 
-    public Cell(Integer x, int y, Boolean isBlocked, Integer id) {
-        super();
-        setMinSize(30, 30);
-        setMaxSize(30, 30);
-        setPrefSize(30,30);
-        if(isBlocked) setText("[" + id + "]");
-        else setText(Integer.toString(id));
-        this.x = x;
-        this.y = y;
-        this.isBlocked = isBlocked;
-        setId(Integer.toString(id));
-        setStyle("-fx-base: #ffffff;");
+    public Cell() {
+        cell = new Button();
     }
 
-    public Boolean isBlocked(){
-        return isBlocked;
+    public Cell(Integer coordX, Integer coordY) {
+        cell = new Button();
+        setCoordX(coordX);
+        setCoordY(coordY);
     }
 
-    public Boolean mark() {
-        setStyle("-fx-base: #ee2211;");
-        return true;
+    public Cell(Integer coordX, Integer coordY, Integer size) {
+        cell = new Button();
+        setCoordX(coordX);
+        setCoordY(coordY);
+        setSize(size);
     }
 
-    public Boolean unmark() {
-        setStyle("-fx-base: #ffffff;");
-        return true;
+    public Integer getSize() {
+        return size;
     }
 
-    public void setEvent(EventHandler<ActionEvent> event){
-        setOnAction(event);
+    public void setSize(Integer size) {
+        setMinSize(size, size);
+        setMaxSize(size, size);
+        setPrefSize(size, size);
     }
 
-    public Integer getCoordX(){
-        return x;
+    public Boolean isBlocked() {
+        return block;
     }
 
-    public Integer getCoordY(){
-        return y;
+    public void setBlock(Boolean block) {
+        this.block = block;
+    }
+
+    public String getMarkStyle() {
+        return markStyle;
+    }
+
+    public void setMarkStyle(String markStyle) {
+        this.markStyle = markStyle;
+    }
+
+    public String getUnmarkStyle() {
+        return unmarkStyle;
+    }
+
+    public void setUnmarkStyle(String unmarkStyle) {
+        this.unmarkStyle = unmarkStyle;
+    }
+
+    public void mark() {
+        setStyle(markStyle);
+    }
+
+    public void unmark() {
+        setStyle(unmarkStyle);
+    }
+
+    public Integer getCoordX() {
+        return coordX;
+    }
+
+    public void setCoordX(Integer coordX) {
+        this.coordX = coordX;
+    }
+
+    public Integer getCoordY() {
+        return coordY;
+    }
+
+    public void setCoordY(Integer coordY) {
+        this.coordY = coordY;
     }
 }

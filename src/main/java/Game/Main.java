@@ -41,6 +41,7 @@ public class Main extends Application {
         //Set up board
         controller.createBoard();
         controller.fillBoard(10,10);
+        controller.getBoard().setAlignment(Pos.CENTER);
 
         //Set up output text label
         controller.createOutput();
@@ -62,6 +63,7 @@ public class Main extends Application {
         setUpStartMenu();
 
         //Set up view alignment and margin
+        controller.getView().setAlignment(controller.getBoard(), Pos.CENTER);
         controller.getView().setAlignment(controller.getLeaderboard(), Pos.CENTER);
         controller.getView().setAlignment(controller.getOutput(), Pos.CENTER);
         controller.getView().setMargin(controller.getOutput(), new Insets(12,12,30,12));
@@ -117,6 +119,7 @@ public class Main extends Application {
         return restartGame -> {
             controller.createBoard();
             controller.fillBoard(10,10);
+            controller.getBoard().setAlignment(Pos.CENTER);
             controller.getView().setCenter(controller.getBoard());
         };
     }

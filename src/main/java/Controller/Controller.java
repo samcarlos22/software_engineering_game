@@ -12,8 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.time.Instant;
 import java.util.Random;
@@ -69,33 +67,40 @@ public class Controller {
         return output;
     }
 
-    public void fillBoard(Integer rowsNumber, Integer columnsNumber) {
+    public void fillBoard(int rowsNumber, int columnsNumber) {
         Random random = new Random();
         for (int x = 0; x < rowsNumber; x++) {
             for (int y = 0; y < columnsNumber; y++) {
-                float blockChance = random.nextFloat();
-                Boolean isBlocked = false;
-                if (blockChance <= 0.20) {
-                    isBlocked = true;
+                Cell cell = new Cell(x, y, 30);
+                cell.setId(Integer.toString(random.nextInt(4) + 1));
+                cell.setMarkStyle("-fx-base: #ee2211;");
+                cell.setUnmarkStyle("-fx-base: #ffffff;");
+                if (random.nextFloat() <= 0.20) {
+                    cell.setBlock(true);
+                    cell.setText("[" + cell.getId() + "]");
+                }
+                else{
+                    cell.setBlock(false);
+                    cell.setText(cell.getId());
                 }
 
-                Cell c = new Cell(x, y, isBlocked, random.nextInt(4) + 1);
+                cell.setStyle("-fx-base: #ffffff;");
 
                 //Starting point of the board
                 if (x == 0 && y == 0) {
-                    lastCell = c;
+                    lastCell = cell;
                     lastCell.mark();
                 }
 
                 if(x == rowsNumber - 1 && y == columnsNumber - 1){
-                    c.setId("100");
-                    c.setText("*");
-                    c.setEvent(addWinEvent());
+                    cell.setId("100");
+                    cell.setText("*");
+                    cell.setOnAction(addWinEvent());
                 }
                 else
-                    c.setEvent(addMoveEvent());
+                    cell.setOnAction(addMoveEvent());
 
-                board.add(c, x, y);
+                board.add(cell, x, y, 1, 1);
             }
         }
     }
