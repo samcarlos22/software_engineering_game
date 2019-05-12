@@ -84,7 +84,7 @@ public class Controller {
                     cell.setText(cell.getId());
                 }
 
-                cell.setStyle("-fx-base: #ffffff;");
+                cell.unmark();
 
                 //Starting point of the board
                 if (x == 0 && y == 0) {
