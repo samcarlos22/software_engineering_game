@@ -31,6 +31,7 @@ public class View extends BorderPane{
     private TextField nameField;
     private VBox startMenu;
     private Label outputMessage;
+    private Label welcomeMessage;
 
     public View(Controller controller) {
         this.controller = controller;
@@ -121,6 +122,7 @@ public class View extends BorderPane{
     private EventHandler<ActionEvent> startGameEvent(){
         return startGame -> {
             controller.createBoard(10, 10);
+            controller.createPlayer(nameField.getText());
 
             restartButton = new Button("Restart Game");
             restartButton.setOnAction(restartGameEvent());
@@ -137,11 +139,19 @@ public class View extends BorderPane{
             outputMessage.setTextAlignment(TextAlignment.CENTER);
             outputMessage.setTextFill(Paint.valueOf("blue"));
 
+            welcomeMessage = new Label("Welcome, " + controller.getPlayer().getName());
+            welcomeMessage.setAlignment(Pos.CENTER);
+            welcomeMessage.setTextAlignment(TextAlignment.CENTER);
+            welcomeMessage.setTextFill(Paint.valueOf("blue"));
+
             setAlignment(board, Pos.CENTER);
             //setAlignment(controller.getLeaderboard(), Pos.CENTER);
             setAlignment(outputMessage, Pos.CENTER);
             setMargin(outputMessage, new Insets(12,12,30,12));
+            setAlignment(welcomeMessage, Pos.CENTER);
+            setMargin(welcomeMessage, new Insets(30,12,12,12));
 
+            setTop(welcomeMessage);
             setCenter(board);
             setLeft(startMenu);
             setBottom(outputMessage);

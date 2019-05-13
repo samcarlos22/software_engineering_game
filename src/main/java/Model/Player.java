@@ -1,27 +1,26 @@
 package Model;
 
-import javafx.scene.control.Label;
+public class Player{
+    private String name;
+    private Double score;
 
-public class Player extends Label {
-    private Label name;
-    private Label score;
-
-    public Player(){
-        name = new Label();
-        score = new Label();
+    public Player(String name){
+        this.name = name;
     }
 
     public String getName() {
-        return name.getText();
+        return name;
     }
 
     public void setName(String name) {
-        this.name.setText(name);
+        this.name = name;
     }
 
-    public String getScore() { return score.getText(); }
+    public Double getScore() {
+        return score;
+    }
 
-    public void setScore(String score) {
-        this.score.setText(score);
+    public void setScore(Double score) {
+        this.score = score;
     }
 }

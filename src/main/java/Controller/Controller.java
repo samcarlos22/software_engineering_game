@@ -14,14 +14,11 @@ public class Controller {
 
     private Board board;
     private View view;
+    private Player player;
 
     public void createView(){
         view = new View(this);
         Logger.info("New View Created");
-    }
-
-    public View getView(){
-        return view;
     }
 
     public void createBoard(Integer columnSize, Integer rowSize){
@@ -34,12 +31,21 @@ public class Controller {
         }
     }
 
-    public String[][] getBoard() {
-        return board.getBoard();
+    public void createPlayer(String name){
+        player = new Player(name);
+        Logger.info("New Player Created");
     }
 
-    public void setBoard(String[][] board) {
-        this.board.setBoard(board);
+    public Player getPlayer(){
+        return player;
+    }
+
+    public View getView(){
+        return view;
+    }
+
+    public String[][] getBoard() {
+        return board.getBoard();
     }
 
     public Boolean canMove(String lastCell, String currentCell) {
