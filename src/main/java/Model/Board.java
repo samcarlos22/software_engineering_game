@@ -25,21 +25,6 @@ public class Board{
         }
     }
 
-    /*public void print(){
-        for (int x = 0; x < board.length; x++) {
-            for (int y = 0; y < board[0].length; y++) {
-                String[] array = board[x][y].split(",");
-                if ( Double.parseDouble(array[3]) <= 0.20) {
-                    Logger.info("[ " + array[0] + " ]");
-                }
-                else{
-                    Logger.info("( " + array[0] + " )");
-                }
-            }
-            Logger.info("\n");
-        }
-    }*/
-
     public void setBoard(String[][] board){
         this.board = board;
     }

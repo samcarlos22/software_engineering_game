@@ -3,18 +3,32 @@ package Controller;
 import Model.Leaderboard;
 import Model.Player;
 import Model.Board;
+import View.View;
 import org.tinylog.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Controller {
 
     private Board board;
+    private View view;
+
+    public void createView(){
+        view = new View(this);
+        Logger.info("New View Created");
+    }
+
+    public View getView(){
+        return view;
+    }
 
     public void createBoard(Integer columnSize, Integer rowSize){
         try{
             board = new Board(columnSize, rowSize);
             board.fillBoard();
-            Logger.info("Board Created.");
+            Logger.info("New Board Created");
         }catch (ExceptionInInitializerError e){
             Logger.error(e.getException());
         }
@@ -28,58 +42,58 @@ public class Controller {
         this.board.setBoard(board);
     }
 
-    /*
-    private EventHandler<ActionEvent> addMoveEvent() {
-        return event -> {
-            currentCell = (Cell) event.getSource();
-            if (canMove()) {
-                lastCell.unmark();
-                lastCell = currentCell;
-                lastCell.mark();
-            }
-        };
-    }
+    public Boolean canMove(String lastCell, String currentCell) {
+        
+        List<Integer> lastCellAttributes = new ArrayList<>();
+        List<Integer> currentCellAttributes = new ArrayList<>();
+        double lastCellBlockPercent = 0.0;
+        String[] attributes;
 
-    private EventHandler<ActionEvent> addWinEvent(){
-        return event -> {
-            currentCell = (Cell) event.getSource();
-            if (canMove()) {
-                lastCell.unmark();
-                lastCell = currentCell;
-                lastCell.mark();
-                output.setText("Congratulations!! You won.");
-            }
-        };
-    }
+        attributes = currentCell.split(",");
+        for (int i = 0; i < 3; i++) {
+            currentCellAttributes.add(Integer.parseInt(attributes[i]));
+        }
 
-    private Boolean canMove() {
-        if (!lastCell.isBlocked()) {
-            if (currentCell.getCoordX() == lastCell.getCoordX() + Integer.parseInt(lastCell.getId())
-                    && currentCell.getCoordY() == lastCell.getCoordY()
-                    || currentCell.getCoordX() == lastCell.getCoordX() - Integer.parseInt(lastCell.getId())
-                    && currentCell.getCoordY() == lastCell.getCoordY()
-                    || currentCell.getCoordY() == lastCell.getCoordY() + Integer.parseInt(lastCell.getId())
-                    && currentCell.getCoordX() == lastCell.getCoordX()
-                    || currentCell.getCoordY() == lastCell.getCoordY() - Integer.parseInt(lastCell.getId())
-                    && currentCell.getCoordX() == lastCell.getCoordX()) {
-                output.setText("");
+        attributes = lastCell.split(",");
+        for (int i = 0; i < 3; i++) {
+            lastCellAttributes.add(Integer.parseInt(attributes[i]));
+        }
+
+        lastCellBlockPercent = Double.parseDouble(attributes[3]);
+        
+        if (!(lastCellBlockPercent <= 0.20)) {
+            if (currentCellAttributes.get(1) == lastCellAttributes.get(1) + lastCellAttributes.get(0)
+                    && currentCellAttributes.get(2) == lastCellAttributes.get(2)
+                    || currentCellAttributes.get(1) == lastCellAttributes.get(1) - lastCellAttributes.get(0)
+                    && currentCellAttributes.get(2) == lastCellAttributes.get(2)
+                    || currentCellAttributes.get(2) == lastCellAttributes.get(2) + lastCellAttributes.get(0)
+                    && currentCellAttributes.get(1) == lastCellAttributes.get(1)
+                    || currentCellAttributes.get(2) == lastCellAttributes.get(2) - lastCellAttributes.get(0)
+                    && currentCellAttributes.get(1) == lastCellAttributes.get(1)) {
+                Logger.info("Move to (" + currentCellAttributes.get(1) + ", " + currentCellAttributes.get(2)+ ")");
                 return true;
             }
         } else {
-            if (currentCell.getCoordX() == lastCell.getCoordX() + Integer.parseInt(lastCell.getId())
-                    && currentCell.getCoordY() == lastCell.getCoordY() + Integer.parseInt(lastCell.getId())
-                    || currentCell.getCoordX() == lastCell.getCoordX() - Integer.parseInt(lastCell.getId())
-                    && currentCell.getCoordY() == lastCell.getCoordY() - Integer.parseInt(lastCell.getId())
-                    || currentCell.getCoordY() == lastCell.getCoordY() + Integer.parseInt(lastCell.getId())
-                    && currentCell.getCoordX() == lastCell.getCoordX() - Integer.parseInt(lastCell.getId())
-                    || currentCell.getCoordY() == lastCell.getCoordY() - Integer.parseInt(lastCell.getId())
-                    && currentCell.getCoordX() == lastCell.getCoordX() + Integer.parseInt(lastCell.getId())) {
-                output.setText("");
+            if (currentCellAttributes.get(1) == lastCellAttributes.get(1) + lastCellAttributes.get(0)
+                    && currentCellAttributes.get(2) == lastCellAttributes.get(2) + lastCellAttributes.get(0)
+                    || currentCellAttributes.get(1) == lastCellAttributes.get(1) - lastCellAttributes.get(0)
+                    && currentCellAttributes.get(2) == lastCellAttributes.get(2) - lastCellAttributes.get(0)
+                    || currentCellAttributes.get(2) == lastCellAttributes.get(2) + lastCellAttributes.get(0)
+                    && currentCellAttributes.get(1) == lastCellAttributes.get(1) - lastCellAttributes.get(0)
+                    || currentCellAttributes.get(2) == lastCellAttributes.get(2) - lastCellAttributes.get(0)
+                    && currentCellAttributes.get(1) == lastCellAttributes.get(1) + lastCellAttributes.get(0)) {
+                Logger.info("Move to (" + currentCellAttributes.get(1) + ", " + currentCellAttributes.get(2)+ ")");
                 return true;
             }
         }
-        output.setText("Invalid move.");
         return false;
     }
-    */
+
+    public Boolean isGoal(String lastCellValue) {
+        if (lastCellValue.equals("*")) {
+            Logger.info("Game Finished");
+            return true;
+        }
+        return false;
+    }
 }
