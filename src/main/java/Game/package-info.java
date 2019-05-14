@@ -1,4 +1,4 @@
 /**
- * Provides the game's Main class.
+ * Provides the game's Launcher class.
  */
 package Game;
