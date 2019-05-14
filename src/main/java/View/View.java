@@ -86,6 +86,7 @@ public class View extends BorderPane{
      * @see Controller
      */
     public View(Controller controller) {
+
         this.controller = controller;
 
         setPrefSize(600, 480);

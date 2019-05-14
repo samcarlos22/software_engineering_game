@@ -28,11 +28,21 @@ public class Player{
     private Double score;
 
     /**
-     * Creates a named {@code Player} object.
+     * Creates a {@code Player} object.
      * @param name the player's name.
      */
     public Player(String name){
         this.name = name;
+    }
+
+    /**
+     * Creates a {@code Player} object.
+     * @param name the player's name.
+     * @param score the player's score.
+     */
+    public Player(String name, Double score){
+        this.name = name;
+        this.score = score;
     }
 
     /**
