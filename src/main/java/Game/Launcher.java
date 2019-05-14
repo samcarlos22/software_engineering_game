@@ -32,7 +32,7 @@ public class Launcher extends Application {
     }
 
     /**
-     * Launches the JavaFX {@code Platform}
+     * Launches the JavaFX {@code Platform}.
      * @see javafx.application.Platform
      * @param args start up input arguments.
      */

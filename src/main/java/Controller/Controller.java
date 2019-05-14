@@ -33,8 +33,12 @@ public class Controller {
      * @see View
      */
     public void createView(){
-        view = new View(this);
-        Logger.info("New View Created");
+        try {
+            view = new View(this);
+            Logger.info("New View Created");
+        }catch (ExceptionInInitializerError e){
+            Logger.error(e.getException());
+        }
     }
 
     /**
@@ -59,8 +63,12 @@ public class Controller {
      * @see Player
      */
     public void createPlayer(String name){
-        player = new Player(name);
-        Logger.info("New Player Created");
+        try {
+            player = new Player(name);
+            Logger.info("New Player Created");
+        }catch (ExceptionInInitializerError e){
+            Logger.error(e.getException());
+        }
     }
 
     /**
