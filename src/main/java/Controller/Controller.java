@@ -1,6 +1,5 @@
 package Controller;
 
-import Model.Leaderboard;
 import Model.Player;
 import Model.Board;
 import View.View;
@@ -9,18 +8,41 @@ import org.tinylog.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Class representing the game's controller.
+ */
 public class Controller {
 
+    /**
+     * The actual game's board.
+     */
     private Board board;
+
+    /**
+     * The actual game's GUI.
+     */
     private View view;
+
+    /**
+     * The actual game's player.
+     */
     private Player player;
 
+    /**
+     * Creates a new instance of {@code View}.
+     * @see View
+     */
     public void createView(){
         view = new View(this);
         Logger.info("New View Created");
     }
 
+    /**
+     * Creates a new instance of {@code Board}.
+     * @param columnSize the board's number of columns.
+     * @param rowSize the board's number of rows.
+     * @see Board
+     */
     public void createBoard(Integer columnSize, Integer rowSize){
         try{
             board = new Board(columnSize, rowSize);
@@ -31,23 +53,49 @@ public class Controller {
         }
     }
 
+    /**
+     * Creates a new instance of {@code Player}.
+     * @param name the player's name.
+     * @see Player
+     */
     public void createPlayer(String name){
         player = new Player(name);
         Logger.info("New Player Created");
     }
 
+    /**
+     * Returns the actual game's player.
+     * @return the actual game's player.
+     */
     public Player getPlayer(){
         return player;
     }
 
+    /**
+     * Returns the actual game's GUI.
+     * @return the actual game's GUI.
+     */
     public View getView(){
         return view;
     }
 
+    /**
+     * Returns the actual game's board data.
+     * @return the actual game's board data.
+     */
     public String[][] getBoard() {
         return board.getBoard();
     }
 
+    /**
+     * Returns {@code True} or {@code False} whether the player's movement
+     * is valid or not.
+     * @param lastCell the last cell which player has moved to.
+     * @param currentCell the current cell which player has clicked in.
+     * @see View
+     * @return True if the player's movement is valid;
+     *         False if the player's movement is not valid.
+     */
     public Boolean canMove(String lastCell, String currentCell) {
         
         List<Integer> lastCellAttributes = new ArrayList<>();
@@ -95,6 +143,14 @@ public class Controller {
         return false;
     }
 
+    /**
+     * Returns {@code True} or {@code False} whether the player's wins
+     * the game.
+     * @param lastCellValue the value of the last cell which player has moved to.
+     * @see View
+     * @return True if the player's wins the game by moving to this cell;
+     *         False if the player's didn't win the game by moving to this cell.
+     */
     public Boolean isGoal(String lastCellValue) {
         if (lastCellValue.equals("*")) {
             Logger.info("Game Finished");
