@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.TextAlignment;
+import org.tinylog.Logger;
 
 /**
  * Class representing the game's GUI.
@@ -280,18 +281,21 @@ public class View extends BorderPane{
      */
     private EventHandler<ActionEvent> addMoveEvent() {
         return event -> {
-            currentCell = (Button) event.getSource();
-            if (controller.canMove(lastCell.getId(), currentCell.getId())) {
-                unmark(lastCell);
-                lastCell = currentCell;
-                mark(lastCell);
-                outputMessage.setText("");
-                if(controller.isGoal(lastCell.getText())){
-                    outputMessage.setText("Congratulations!! You won.");
-                }
+            try {
+                currentCell = (Button) event.getSource();
+                if (controller.canMove(lastCell.getId(), currentCell.getId())) {
+                    unmark(lastCell);
+                    lastCell = currentCell;
+                    mark(lastCell);
+                    outputMessage.setText("");
+                    if (controller.isGoal(lastCell.getText())) {
+                        outputMessage.setText("Congratulations!! You won.");
+                    }
+                } else
+                    outputMessage.setText("Invalid move");
+            } catch (Exception e){
+                Logger.error(e.getMessage());
             }
-            else
-                outputMessage.setText("Invalid move");
         };
     }
 
