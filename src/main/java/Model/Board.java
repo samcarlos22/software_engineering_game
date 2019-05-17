@@ -1,7 +1,6 @@
 package Model;
 
-
-import java.util.Random;
+import org.tinylog.Logger;
 
 /**
  * Class representing the game's board.
@@ -11,48 +10,150 @@ public class Board{
     /**
      * The matrix representing the game's board.
      */
-    private String[][] board;
+    private final int[][] board = new int[][] {
+
+            {4, 2, 2, 4, 4, 3, 4, 3},
+            {3, 5, 3, 4, 2, 3, 5, 2},
+            {4, 3, 2, 5, 2, 2, 5, 2},
+            {7, 1, 4, 4, 4, 2, 2, 3},
+            {3, 2, 2, 4, 2, 5, 2, 5},
+            {2, 3, 2, 4, 4, 2, 5, 1},
+            {6, 2, 2, 3, 2, 5, 6, 3},
+            {1, 2, 5, 4, 4, 2, 1, 0}
+
+    };
 
     /**
-     * Creates a {@code Board} object.
-     * @param columnSize the board's number of columns.
-     * @param rowSize the board's number of rows.
+     * The matrix representing the board block status of every cell.
      */
-    public Board(Integer columnSize, Integer rowSize){
-        board = new String[rowSize][columnSize];
-    }
+    private final Boolean[][] blockMap = new Boolean[][] {
+
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false}
+
+    };
 
     /**
-     * Fills the board with random generated numbers from 1 to 4.
+     * The initial board's state
      */
-    public void fillBoard() {
-        Random random = new Random();
-        for (int x = 0; x < board.length; x++) {
-            for (int y = 0; y < board[0].length; y++) {
-                Double blockChance = random.nextDouble();
+    private final int[][] INITIAL_STATE = new int[][]{
 
-                board[x][y] = (random.nextInt(4) + 1)
-                               + "," + Integer.toString(x)
-                               + "," + Integer.toString(y)
-                               + "," + Double.toString(random.nextDouble());
-            }
-        }
-    }
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0}
+
+    };
 
     /**
-     * Sets the game's board.
-     * @param board the game's board.
+     * The final board's state
      */
-    public void setBoard(String[][] board){
-        this.board = board;
+    private final int[][] GOAL_STATE = new int[][]{
+
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 1}
+
+    };
+
+    /**
+     * The current board's state
+     */
+    private int[][] CURRENT_STATE;
+
+    /**
+     * Creates a {@code Board} object and sets
+     * its first movement state.
+     */
+    public Board(){
+
+        move(0, 0);
+
     }
 
     /**
      * Returns the game's board.
      * @return the game's board.
      */
-    public String[][] getBoard(){
+    public int[][] getBoard(){
         return board;
+    }
+
+    /**
+     * Returns the game's block map.
+     * @return the game's block map.
+     */
+    public Boolean[][] getBlockMap(){
+        return blockMap;
+    }
+
+    /**
+     * Returns the game's current state.
+     * @return the game's current state.
+     */
+    public int[][] getCurrentState(){
+        return CURRENT_STATE;
+    }
+
+    /**
+     * Returns the game's initial state.
+     * @return the game's initial state.
+     */
+    public int[][] getInitialState(){
+        return INITIAL_STATE;
+    }
+
+    /**
+     * Returns the game's goal state.
+     * @return the game's goal state.
+     */
+    public int[][] getFinalState(){
+        return GOAL_STATE;
+    }
+
+    /**
+     * Compares if two given states are identical
+     * @return True if the given states are identical.
+     *         False if the given states are not identical.
+     */
+    public Boolean compareStates(int[][] state1, int[][] state2){
+        try {
+            int i, j;
+            if (state1.length == state2.length && state1[0].length == state2[0].length) {
+                for (i = 0; i < state1.length; i++)
+                    for (j = 0; j < state2.length; j++)
+                        if (state1[i][j] != state2[i][j])
+                            return false;
+            }
+            return true;
+        }catch (Exception e) {
+            Logger.error("Invalid matrices.");
+            return false;
+        }
+    }
+
+    /**
+     * Sets the game's current movement state.
+     *
+     */
+    public void move(int coordX, int coordY){
+        CURRENT_STATE = INITIAL_STATE;
+        CURRENT_STATE[coordX][coordY] = 1;
     }
 
 }

@@ -3,10 +3,12 @@ package View;
 import Controller.Controller;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,6 +18,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.TextAlignment;
 import org.tinylog.Logger;
+
+import java.util.List;
 
 /**
  * Class representing the game's GUI.
@@ -29,22 +33,7 @@ public class View extends BorderPane{
     /**
      * The matrix pane representing the game's board.
      */
-    private GridPane board;
-
-    /**
-     * The clickable tile representing the game's board cells.
-     */
-    private Button cell;
-
-    /**
-     * The last cell which player has moved to.
-     */
-    private Button lastCell;
-
-    /**
-     * The current cell which player has clicked in.
-     */
-    private Button currentCell;
+    private GridPane grid;
 
     /**
      * The button that starts the game.
@@ -121,79 +110,60 @@ public class View extends BorderPane{
     }
 
     /**
-     * Sets up the game board GUI.
-     * @param tempBoard the board data provided by the {@code Controller}
+     * Collects board's data from {@code Controller} and sets up a grid view.
      * @see Controller
      */
-    public void setUpBoard(String[][] tempBoard){
-        board = new GridPane();
-        for (int x = 0; x < tempBoard.length; x++) {
-            for (int y = 0; y < tempBoard[0].length; y++) {
-                String[] cellAttributes = tempBoard[x][y].split(",");
+    public void setUpBoard(){
+        grid = new GridPane();
+        for (int x = 0; x < controller.getBoard().length; x++) {
+            for (int y = 0; y < controller.getBoard()[0].length; y++) {
+                Cell cell = new Cell(x, y, controller.getBlockMap()[x][y]);
 
-                cell = new Button();
+                cell.setText(Integer.toString(controller.getBoard()[x][y]));
+                cell.setId(cell.getText());
 
-                cell.setText(cellAttributes[0]);
-                cell.setId(tempBoard[x][y]);
+                cell.setMinSize(30, 30);
+                cell.setMaxSize(30, 30);
+                cell.setPrefSize(30, 30);
 
-                resizeCell();
-                unmark(cell);
-
-                if (Double.parseDouble(cellAttributes[3]) <= 0.20) {
-                    blockCell();
+                if (cell.isBlocked()) {
+                    cell.setText("[" + cell.getText() + "]");
                 }
 
-                if (x == 0 && y == 0) {
-                    mark(cell);
-                    lastCell = cell;
-                }
-
-                if(x == tempBoard.length - 1 && y == tempBoard[0].length - 1){
-                    //cell.setId("100");
-                    cell.setText("*");
-                }
+                update(controller.getCurrentState());
 
                 cell.setOnAction(addMoveEvent());
 
-                board.add(cell, x, y, 1, 1);
+                grid.add(cell, x, y, 1, 1);
             }
         }
 
-        board.setAlignment(Pos.CENTER);
-        setCenter(board);
+        grid.setAlignment(Pos.CENTER);
+        setCenter(grid);
     }
 
     /**
-     * Resizes the clickable button cells.
+     * Updates {@GridPane}'s view.
+     * @param state the current {@code Board}'s state.
+     * @see Model.Board
+     * @see GridPane
      */
-    public void resizeCell(){
-        cell.setMinSize(30, 30);
-        cell.setMaxSize(30, 30);
-        cell.setPrefSize(30, 30);
-    }
+    public void update(int[][] state){
 
-    /**
-     * Change the clickable button cells color to RED.
-     * @param cell which cell to mark.
-     */
-    public void mark(Button cell){
-        cell.setStyle("-fx-base: #ee2211;");
-    }
-
-    /**
-     * Change the clickable button cells color to WHITE.
-     * @param cell which cell to unmark.
-     */
-    public void unmark(Button cell){
-        cell.setStyle("-fx-base: #ffffff;");
-    }
-
-    /**
-     * Changes the clickable button exibition text from 1 to [1].
-     * This status changes the board's moviment dinamic.
-     */
-    public void blockCell(){
-        cell.setText("[" + cell.getText() + "]");
+        ObservableList<Node> cells = grid.getChildren();
+        for (int x = 0; x < 8; x++)
+            for (int y = 0; y < 8; y++)
+                for (Node cell : cells) {
+                    if (GridPane.getRowIndex(cell) == x && GridPane.getColumnIndex(cell) == y) {
+                        if (state[x][y] == 0){
+                            cell.setStyle("-fx-base: #ffffff;");
+                        }
+                        else {
+                            cell.setStyle("-fx-base: #ee2211;");
+                        }
+                        //break;
+                    }
+                }
     }
 
     /**
@@ -206,7 +176,7 @@ public class View extends BorderPane{
      */
     private EventHandler<ActionEvent> startGameEvent(){
         return startGame -> {
-            controller.createBoard(10, 10);
+            controller.createBoard();
             controller.createPlayer(nameField.getText());
 
             restartButton = new Button("Restart Game");
@@ -217,7 +187,7 @@ public class View extends BorderPane{
 
             setAlignment(startMenu, Pos.CENTER);
 
-            setUpBoard(controller.getBoard());
+            setUpBoard();
 
             outputMessage = new Label();
             outputMessage.setAlignment(Pos.CENTER);
@@ -229,7 +199,7 @@ public class View extends BorderPane{
             welcomeMessage.setTextAlignment(TextAlignment.CENTER);
             welcomeMessage.setTextFill(Paint.valueOf("blue"));
 
-            setAlignment(board, Pos.CENTER);
+            setAlignment(grid, Pos.CENTER);
             //setAlignment(controller.getLeaderboard(), Pos.CENTER);
             setAlignment(outputMessage, Pos.CENTER);
             setMargin(outputMessage, new Insets(12,12,30,12));
@@ -237,7 +207,7 @@ public class View extends BorderPane{
             setMargin(welcomeMessage, new Insets(30,12,12,12));
 
             setTop(welcomeMessage);
-            setCenter(board);
+            setCenter(grid);
             setLeft(startMenu);
             setBottom(outputMessage);
         };
@@ -254,8 +224,7 @@ public class View extends BorderPane{
      */
     private EventHandler<ActionEvent> restartGameEvent(){
         return restartGame -> {
-            controller.createBoard(10,10);
-            setUpBoard(controller.getBoard());
+            setUpBoard();
         };
     }
 
@@ -281,21 +250,20 @@ public class View extends BorderPane{
      */
     private EventHandler<ActionEvent> addMoveEvent() {
         return event -> {
-            try {
-                currentCell = (Button) event.getSource();
-                if (controller.canMove(lastCell.getId(), currentCell.getId())) {
-                    unmark(lastCell);
-                    lastCell = currentCell;
-                    mark(lastCell);
+            //try {
+                Cell clickedCell = (Cell) event.getSource();
+                Boolean moved = controller.move(Integer.parseInt(clickedCell.getId()), clickedCell.getX(), clickedCell.getY());
+                if (moved){
+                    update(controller.getCurrentState());
                     outputMessage.setText("");
-                    if (controller.isGoal(lastCell.getText())) {
+                    if (controller.isGoal()) {
                         outputMessage.setText("Congratulations!! You won.");
                     }
                 } else
                     outputMessage.setText("Invalid move");
-            } catch (Exception e){
-                Logger.error(e.getMessage());
-            }
+            //} catch (Exception e){
+            //    Logger.error(e.getMessage());
+            //}
         };
     }
 
