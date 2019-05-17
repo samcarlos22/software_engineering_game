@@ -139,7 +139,7 @@ public class View extends BorderPane{
                 resizeCell();
                 unmark(cell);
 
-                if (Double.parseDouble(cellAttributes[3]) <= 0.20) {
+                if (cellAttributes[3].equals("true")) {
                     blockCell();
                 }
 
@@ -155,7 +155,7 @@ public class View extends BorderPane{
 
                 cell.setOnAction(addMoveEvent());
 
-                board.add(cell, x, y, 1, 1);
+                board.add(cell, y, x, 1, 1);
             }
         }
 
@@ -206,7 +206,7 @@ public class View extends BorderPane{
      */
     private EventHandler<ActionEvent> startGameEvent(){
         return startGame -> {
-            controller.createBoard(10, 10);
+            controller.createBoard(8, 8);
             controller.createPlayer(nameField.getText());
 
             restartButton = new Button("Restart Game");
@@ -254,7 +254,7 @@ public class View extends BorderPane{
      */
     private EventHandler<ActionEvent> restartGameEvent(){
         return restartGame -> {
-            controller.createBoard(10,10);
+            controller.createBoard(8,8);
             setUpBoard(controller.getBoard());
         };
     }

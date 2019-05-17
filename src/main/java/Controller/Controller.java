@@ -108,7 +108,6 @@ public class Controller {
         
         List<Integer> lastCellAttributes = new ArrayList<>();
         List<Integer> currentCellAttributes = new ArrayList<>();
-        double lastCellBlockPercent = 0.0;
         String[] attributes;
 
         attributes = currentCell.split(",");
@@ -121,9 +120,9 @@ public class Controller {
             lastCellAttributes.add(Integer.parseInt(attributes[i]));
         }
 
-        lastCellBlockPercent = Double.parseDouble(attributes[3]);
+        String block = attributes[3];
         
-        if (!(lastCellBlockPercent <= 0.20)) {
+        if (!block.equals("true")) {
             if (currentCellAttributes.get(1) == lastCellAttributes.get(1) + lastCellAttributes.get(0)
                     && currentCellAttributes.get(2) == lastCellAttributes.get(2)
                     || currentCellAttributes.get(1) == lastCellAttributes.get(1) - lastCellAttributes.get(0)
@@ -166,4 +165,5 @@ public class Controller {
         }
         return false;
     }
+
 }

@@ -9,6 +9,38 @@ import java.util.Random;
 public class Board{
 
     /**
+     * The initial board's state
+     */
+    private final int[][] INITIAL_STATE = new int[][]{
+
+            {4, 2, 2, 4, 4, 3, 4, 3},
+            {3, 5, 3, 4, 2, 3, 5, 2},
+            {4, 3, 2, 5, 2, 2, 5, 2},
+            {7, 1, 4, 4, 4, 2, 2, 3},
+            {3, 2, 2, 4, 2, 5, 2, 5},
+            {2, 3, 2, 4, 4, 2, 5, 1},
+            {6, 2, 2, 3, 2, 5, 6, 3},
+            {1, 2, 5, 4, 4, 2, 1, 0}
+
+    };
+
+    /**
+     * The matrix representing the board block status of every cell.
+     */
+    private final Boolean[][] blockMap = new Boolean[][] {
+
+            {false, false, true, false, false, true, false, true},
+            {false, false, false, false, false, false, false, true},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, true, false, false, false, false},
+            {true, false, false, false, false, false, false, false},
+            {false, true, false, false, false, false, false, true},
+            {false, false, false, true, false, false, false, false},
+            {false, true, false, false, false, false, true, false}
+
+    };
+
+    /**
      * The matrix representing the game's board.
      */
     private String[][] board;
@@ -28,13 +60,12 @@ public class Board{
     public void fillBoard() {
         Random random = new Random();
         for (int x = 0; x < board.length; x++) {
-            for (int y = 0; y < board[0].length; y++) {
-                Double blockChance = random.nextDouble();
+            for (int y = 0; y < board.length; y++) {
 
-                board[x][y] = (random.nextInt(4) + 1)
+                board[x][y] = (INITIAL_STATE[x][y])
                                + "," + Integer.toString(x)
                                + "," + Integer.toString(y)
-                               + "," + Double.toString(random.nextDouble());
+                               + "," + Boolean.toString(blockMap[x][y]);
             }
         }
     }
@@ -55,4 +86,7 @@ public class Board{
         return board;
     }
 
+    public int[][] getInitialState() {
+        return INITIAL_STATE;
+    }
 }
